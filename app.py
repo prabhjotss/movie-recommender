@@ -7,21 +7,25 @@ import numpy as np
 app = Flask(__name__)
 
 # ---------------- Load movie data ----------------
-movies_data = pd.read_csv("movies.csv")   # <-- Important change
+movies_data = pd.read_csv("movie.csv")
 movies_data.fillna('', inplace=True)
 
-selected_features = ['genres', 'keywords', 'tagline', 'cast', 'director']
+# Columns in your dataset:
+# movie_id, movie_name, year, genre, overview, director, cast
+
+selected_features = ['genre', 'overview', 'director', 'cast']
 for feature in selected_features:
     movies_data[feature] = movies_data[feature].fillna('')
 
+# Combine features
 combined_features = (
-    movies_data['genres'] + ' ' +
-    movies_data['keywords'] + ' ' +
-    movies_data['tagline'] + ' ' +
-    movies_data['cast'] + ' ' +
-    movies_data['director']
+    movies_data['genre'] + ' ' +
+    movies_data['overview'] + ' ' +
+    movies_data['director'] + ' ' +
+    movies_data['cast']
 )
 
+# Vectorizer
 vectorizer = TfidfVectorizer()
 feature_vectors = vectorizer.fit_transform(combined_features)
 
@@ -30,8 +34,9 @@ def recommend_movies(prompt, top_n=10):
     prompt_vector = vectorizer.transform([prompt])
     similarity_scores = cosine_similarity(prompt_vector, feature_vectors)
     sorted_indices = np.argsort(similarity_scores[0])[::-1][:top_n]
-    recommended = [movies_data.iloc[i]['title'] for i in sorted_indices]
+    recommended = [movies_data.iloc[i]['movie_name'] for i in sorted_indices]
     return recommended
+
 
 # ---------------- HTML Template ----------------
 html_template = """
@@ -187,7 +192,6 @@ html_template = """
 </html>
 """
 
-
 # ---------------- Flask Routes ----------------
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -196,6 +200,7 @@ def index():
         prompt = request.form['prompt']
         recommendations = recommend_movies(prompt, top_n=5)
     return render_template_string(html_template, recommendations=recommendations)
+
 
 # ---------------- Run App ----------------
 if __name__ == "__main__":
