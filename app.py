@@ -7,15 +7,20 @@ import numpy as np
 app = Flask(__name__)
 
 # ---------------- Load movie data ----------------
-movies_data = pd.read_csv(r'E:\Btechthesis\movies.csv')
+movies_data = pd.read_csv("movies.csv")   # <-- Important change
 movies_data.fillna('', inplace=True)
 
-selected_features = ['genres','keywords','tagline','cast','director']
+selected_features = ['genres', 'keywords', 'tagline', 'cast', 'director']
 for feature in selected_features:
     movies_data[feature] = movies_data[feature].fillna('')
 
-combined_features = movies_data['genres'] + ' ' + movies_data['keywords'] + ' ' + \
-                    movies_data['tagline'] + ' ' + movies_data['cast'] + ' ' + movies_data['director']
+combined_features = (
+    movies_data['genres'] + ' ' +
+    movies_data['keywords'] + ' ' +
+    movies_data['tagline'] + ' ' +
+    movies_data['cast'] + ' ' +
+    movies_data['director']
+)
 
 vectorizer = TfidfVectorizer()
 feature_vectors = vectorizer.fit_transform(combined_features)
@@ -28,7 +33,7 @@ def recommend_movies(prompt, top_n=10):
     recommended = [movies_data.iloc[i]['title'] for i in sorted_indices]
     return recommended
 
-# ---------------- HTML Template with Modern CSS ----------------
+# ---------------- HTML Template ----------------
 html_template = """
 <!DOCTYPE html>
 <html lang="en">
@@ -138,5 +143,3 @@ def index():
 # ---------------- Run App ----------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
-
-
