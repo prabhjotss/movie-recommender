@@ -7,7 +7,7 @@ import numpy as np
 app = Flask(__name__)
 
 # ---------------- Load movie data ----------------
-movies_data = pd.read_csv("movies.csv")
+movies_data = pd.read_csv("movie.csv")
 movies_data.fillna('', inplace=True)
 
 # Columns in your dataset:
@@ -205,3 +205,4 @@ def index():
 # ---------------- Run App ----------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
