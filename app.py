@@ -7,7 +7,7 @@ import numpy as np
 app = Flask(__name__)
 
 # ---------------- Load movie data ----------------
-movies_data = pd.read_csv("movie.csv")
+movies_data = pd.read_csv("movies.csv")
 movies_data.fillna('', inplace=True)
 
 # Columns in your dataset:
