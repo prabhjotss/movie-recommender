@@ -40,96 +40,153 @@ html_template = """
 <head>
     <meta charset="UTF-8">
     <title>Movie Recommender</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            padding-top:30px;
+        * {
             margin: 0;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f2f5f9;
+            color: #333;
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            padding: 30px 15px;
         }
+
         .container {
-            background: #fff;
-            padding: 40px;
-            border-radius: 15px;
-            max-width: 700px;
-            width: 90%;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            text-align: center;
+            width: 100%;
+            max-width: 720px;
+            background: #ffffff;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.08);
         }
+
         h2 {
-            margin-bottom: 30px;
-            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+            font-size: 28px;
+            color: #2a4d8f;
         }
-        form input[type=text] {
-            width: 70%;
-            padding: 15px;
+
+        form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        input[type=text] {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            border: 2px solid #cfd8e3;
+            background: #f9fbfd;
+            color: #333;
             font-size: 16px;
-            border: 2px solid #764ba2;
-            border-radius: 30px;
             outline: none;
             transition: 0.3s;
         }
-        form input[type=text]:focus {
-            border-color: #667eea;
+
+        input[type=text]:focus {
+            border-color: #2a4d8f;
+            background: #ffffff;
         }
-        form input[type=submit] {
-            padding: 15px 30px;
-            font-size: 16px;
-            margin-left: 10px;
+
+        input[type=submit] {
+            padding: 14px 22px;
+            background: #2a4d8f;
+            color: white;
             border: none;
-            border-radius: 30px;
-            background: #764ba2;
-            color: #fff;
+            border-radius: 12px;
             cursor: pointer;
+            font-weight: 600;
             transition: 0.3s;
         }
-        form input[type=submit]:hover {
-            background: #667eea;
+
+        input[type=submit]:hover {
+            background: #19386b;
         }
+
         .movie-card {
-            background: #f4f4f4;
-            border-radius: 10px;
-            padding: 15px 20px;
-            margin: 10px 0;
-            text-align: left;
-            font-weight: 500;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            background: #f5f7fa;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 8px 0;
+            font-size: 16px;
+            border: 1px solid #e2e8f0;
             transition: 0.3s;
         }
+
         .movie-card:hover {
-            background: #e1d4f7;
+            background: #e8eef7;
+            border-color: #c3d4ec;
             transform: translateY(-3px);
         }
-        ul {
-            list-style: none;
-            padding: 0;
+
+        h3 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 22px;
+            font-weight: 600;
+            color: #2a4d8f;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        footer span {
+            color: #2a4d8f;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                flex-direction: column;
+            }
+            input[type=submit] {
+                width: 100%;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>🎬 Movie Recommendation System</h2>
+
         <form method="post">
             <input type="text" name="prompt" placeholder="Enter movie name or description" required>
             <input type="submit" value="Recommend">
         </form>
+
         {% if recommendations %}
-            <h3>Recommended Movies:</h3>
-            <ul>
+            <h3>Recommended Movies</h3>
+            <ul style="list-style:none; padding:0;">
                 {% for movie in recommendations %}
                     <li class="movie-card">{{ movie }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
+
+        <footer>Made by <span>Prabhjot Singh</span> ⭐</footer>
     </div>
 </body>
 </html>
 """
+
 
 # ---------------- Flask Routes ----------------
 @app.route('/', methods=['GET', 'POST'])
